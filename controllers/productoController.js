@@ -12,16 +12,13 @@ exports.obtenerProductos = async (req, res) => {
 };
 
 exports.crearProducto = async (req, res) => {
-    console.log( req.body );
     const {} = req.body;
 
     try {
         let producto;
 
-        //guardar el nuevo producto
         producto = new Producto(req.body);
 
-        //guardar producto
         await producto.save();
 
         res.status(200).json(producto);
@@ -33,10 +30,9 @@ exports.crearProducto = async (req, res) => {
     }
 };
 
-//Actualiza un producto
 exports.actualizarProducto = async (req, res) => {
     try {
-        //Extraer el proyecto y comprobar si existe
+
         const { 
             nombre_producto, 
             descripcion_producto, 
@@ -47,14 +43,13 @@ exports.actualizarProducto = async (req, res) => {
             codigo, 
             stock } = req.body;
 
-        //Revisar si la tarea existe o no
+
         let producto = await Producto.findById(req.params.id);
 
         if (!producto) {
             res.status(404).json({ mgs: `No existe el producto ${req.params.id}` });
         }
 
-        //Crear un objeto con la nueva informacion
         const nuevaProducto = {};
         nuevaProducto.nombre_producto = nombre_producto;
         nuevaProducto.descripcion_producto = descripcion_producto;
@@ -65,7 +60,6 @@ exports.actualizarProducto = async (req, res) => {
         nuevaProducto.codigo = codigo;
         nuevaProducto.stock = stock;
 
-        //Guardar el producto
         producto = await Producto.findOneAndUpdate(
             { _id: req.params.id },
             nuevaProducto,
@@ -79,13 +73,10 @@ exports.actualizarProducto = async (req, res) => {
     }
 };
 
-// elimina un producto por su id
 exports.eliminarProducto = async (req, res) => {
     try {
-        //Revisar el id
         let producto = await Producto.findById(req.params.id);
 
-        //Revisar si existe el proyecto o no
         if (!producto) {
             return res.status(404).json({ msg: 'Producto no encontrado' });
         }
